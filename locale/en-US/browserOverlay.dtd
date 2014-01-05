@@ -1,0 +1,18 @@
+<!-- Toolbar button -->
+<!ENTITY h1.toolbarbutton.label   "h1 Preferences">
+<!ENTITY h1.toolbarbutton.tooltip "Adjust h1 preferences">
+
+<!-- Preference Window -->
+<!ENTITY h1.prefs.title "H1 Preferences">
+
+<!-- Preference Tabs -->
+<!ENTITY h1.prefs.etags     "ETags">
+<!ENTITY h1.prefs.referer   "Referrer">
+<!ENTITY h1.prefs.ua        "User Agent">
+<!ENTITY h1.prefs.whitelist "Whitelist">
+
+<!-- Preference labels -->
+<!ENTITY h1.prefs.referer.allow "Allow HTTP Referer headers">
+<!ENTITY h1.prefs.etag.allow    "Allow HTTP ETag headers">
+<!ENTITY h1.prefs.etag.notify   "Notify me when a site is using ETags">
+<!ENTITY h1.prefs.ua.mangle     "Randomize User-Agent string">
