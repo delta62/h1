@@ -1,0 +1,6 @@
+content  h1             content/
+skin     h1 classic/1.0 skin/
+locale   h1 en-US       locale/en-US/
+resource h1             modules/
+
+overlay chrome://browser/content/browser.xul chrome://h1/content/browserOverlay.xul
