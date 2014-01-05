@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<?xml-stylesheet type="text/css" href="chrome://global/skin/" ?>
+<?xml-stylesheet type="text/css" href="chrome://global/skin/global.css" ?>
 
 <!DOCTYPE overlay SYSTEM
     "chrome://h1/locale/browserOverlay.dtd">
@@ -8,8 +8,18 @@
 <overlay
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-    <script type="application/x-javascript"
-	src="chrome://h1/content/browserOverlay.js" />
+    <script type="application/javascript"
+    	src="chrome://h1/content/browserOverlay.js" />
+
+    <toolbarpalette id="BrowserToolbarPalette">
+
+        <toolbarbutton id="h1-preferences-button"
+            class="toolbarbutton-1 chromeclass-toolbar-additional"
+            label="&h1.toolbarbutton.label;"
+            tooltiptext="&h1.toolbarbutton.tooltip;"
+            oncommand="H1.showPreferences(event)" />
+
+    </toolbarpalette>
 
 </overlay>
 

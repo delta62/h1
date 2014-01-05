@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM
+    "chrome://h1/locale/browserOverlay.dtd">
+
+<prefwindow title="&h1.prefs.title;"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    onunload="H1.Preferences.unload(event)">
+
+    <script type="application/javascript"
+        src="chrome://h1/content/preferences.js" />
+
+    <prefpane id="h1-prefs-etag" label="&h1.prefs.etags;">
+        <preferences>
+            <preference id="allow-etag" name="extensions.h1.etag.allow" type="bool" />
+            <preference id="notify-etag" name="extensions.h1.etag.notify" type="bool" />
+        </preferences>
+
+        <checkbox label="&h1.prefs.etag.allow;" preference="allow-etag" />
+        <checkbox label="&h1.prefs.etag.notify;" preference="notify-etag" />
+
+    </prefpane>
+
+    <prefpane id="h1-prefs-referer" label="&h1.prefs.referer;">
+        <preferences>
+            <preference id="allow-referer" name="extensions.h1.referer.allow" type="bool" />
+        </preferences>
+
+        <checkbox label="&h1.prefs.referer.allow;" preference="allow-referer" />
+
+    </prefpane>
+
+    <prefpane id="h1-prefs-ua" label="&h1.prefs.ua;">
+        <preferences>
+            <preference id="mangle-ua" name="extensions.h1.ua.mangle" type="bool" />
+        </preferences>
+
+        <checkbox label="&h1.prefs.ua.mangle;" preference="mangle-ua" />
+    </prefpane>
+
+    <prefpane id="h1-prefs-whitelist" label="&h1.prefs.whitelist;">
+
+        <listbox>
+            <listitem label="a" />
+            <listitem label="b" />
+            <listitem label="c" />
+        </listbox>
+
+    </prefpane>
+
+</prefwindow>
