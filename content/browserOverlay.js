@@ -20,5 +20,8 @@ H1.showPreferences = function(e) {
     H1.preferenceWindow.focus();
 };
 
+// Initialize UA database
+Components.utils.import('resource://h1/database.jsm');
+
 // Initialize networking
 Components.utils.import('resource://h1/networking.jsm');

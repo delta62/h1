@@ -1,0 +1,24 @@
+#
+# User-Agent definitions
+# 
+# Lines starting with a '#', or consisting only of whitespace are ignored. Each
+# line in this will be used as the browser's User-Agent string if UA mangling is
+# enabled in settings.
+#
+
+
+# Firefox definitions
+Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0
+Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:25.0) Gecko/20100101 Firefox/25.0
+
+# Google Chrome definitions
+Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36
+Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1664.3 Safari/537.36
+
+# Internet Explorer definitions
+Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)
+Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)
+
+# Opera definitions
+Opera/9.80 (Windows NT 6.0) Presto/2.12.388 Version/12.14
+Mozilla/5.0 (Windows NT 6.0; rv:2.0) Gecko/20100101 Firefox/4.0 Opera 12.14
