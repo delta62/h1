@@ -54,13 +54,20 @@ var H1Database = (function() {
 
     /**
      * An array of user-agent strings that should be used. This acts as a ring
-     * buffer, loading more random UA strings when it starts running low.
+     * buffer, loading more random UA strings when it starts running low. If a
+     * request is made but no UA strings are available, the real UA of the
+     * browser is sent. If the last UA string is consumed, it will be repeatedly
+     * re-used until more are made available. Thus, the only time the real UA is
+     * sent is when either the random UA coincides with the real one, or when
+     * requests are made before random UA strings can be loaded.
      */
     var uaCache = [ ];
 
     /**
      * Initialize the service. This should only be called once per browser
-     * instance.
+     * instance. Upon initialization, CACHE_SIZE user agent strings will be
+     * available for consupmtion. If a request is made before the cache is
+     * ready, the real user agent string will be used.
      */
     var init = function() {
         checkInstalled();
@@ -73,11 +80,14 @@ var H1Database = (function() {
     var checkInstalled = function() {
         let defFile = FileUtils.getFile(
             PROFILE_DIR,
-            [EXTENSION_DIR, DEFINITION_FILE]
+            [ EXTENSION_DIR, DEFINITION_FILE ]
         );
 
         if (!defFile.exists()) {
+            // Defer loading strings until there is a db to load from
             AddonManager.getAddonByID(ADDON_ID, copyDefaultDefs);
+        } else {
+            loadUAStrings();
         }
     };
 
@@ -118,6 +128,9 @@ var H1Database = (function() {
                 let outStream = FileUtils.openSafeFileOutputStream(defsFile);
                 outStream.write(defContents, defContents.length);
                 FileUtils.closeSafeFileOutputStream(outStream);
+
+                // Load some UA strings
+                loadUAStrings();
             },
             QueryInterface: XPCOMUtils.generateQI([
                 Ci.nsISupports,
@@ -126,11 +139,49 @@ var H1Database = (function() {
             ])
         };
         channel.asyncOpen(handler, null);
-        
+    };
+
+    var loadUAStrings = function() {
+        dump('Loading some UA strings');
+
+        let defsFile = FileUtils.getFile(
+            PROFILE_DIR,
+            [ EXTENSION_DIR, DEFINITION_FILE ]
+        );
+
+        NetUtil.asyncFetch(defsFile, function(inStream, result) {
+            if (!Components.isSuccessCode(result)) {
+                throw 'error';
+            }
+
+            let unparsed = NetUtil.readInputStreamToString(
+                inStream,
+                inStream.available()
+            );
+
+            let lines = unparsed.split(/\r?\n/);
+            while (uaCache.length < CACHE_SIZE) {
+                dump('Testing ' + item + '\n');
+                let item = arrayRand(lines);
+                if (!/^(#.*)|(\s*)$/.test(item)) {
+                    uaCache.push(item);
+                }
+            }
+        });
     };
 
     var getUAString = function() {
 
+    };
+
+    /**
+     * Get a random element out of an array
+     */
+    var arrayRand = function(arr) {
+        let min = 0;
+        let max = arr.length;
+        let idx = Math.random() * (max - min) + min;
+        return arr[idx];
     };
 
     if (!initialized) {
