@@ -15,6 +15,11 @@ const ADDON_ID = 'h1@samnoedel.com';
 const CACHE_SIZE = 100;
 
 /**
+ * The lower-bound of the cache before more items are loaded
+ */
+const MIN_CACHE_SIZE = 5;
+
+/**
  * The XPCOM notification used for referring to the current user's profile
  * directory.
  */ 
@@ -31,10 +36,11 @@ const EXTENSION_DIR = 'h1';
 const DEFINITION_FILE = 'ua.def';
 
 // Import required services
-Components.utils.import("resource://gre/modules/AddonManager.jsm");
+Components.utils.import('resource://gre/modules/AddonManager.jsm');
 Components.utils.import('resource://gre/modules/FileUtils.jsm');
-Components.utils.import("resource://gre/modules/NetUtil.jsm");
-Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+Components.utils.import('resource://gre/modules/NetUtil.jsm');
+Components.utils.import('resource://gre/modules/Timer.jsm');
+Components.utils.import('resource://gre/modules/XPCOMUtils.jsm');
 
 /**
  * The H1 database consists of a file containing the different user agent
@@ -53,8 +59,8 @@ var H1Database = (function() {
     var initialized = false;
 
     /**
-     * An array of user-agent strings that should be used. This acts as a ring
-     * buffer, loading more random UA strings when it starts running low. If a
+     * An array of user-agent strings that should be used. This acts as a stack,
+     * loading more random UA strings when it starts running low. If a
      * request is made but no UA strings are available, the real UA of the
      * browser is sent. If the last UA string is consumed, it will be repeatedly
      * re-used until more are made available. Thus, the only time the real UA is
@@ -62,6 +68,13 @@ var H1Database = (function() {
      * requests are made before random UA strings can be loaded.
      */
     var uaCache = [ ];
+
+    /**
+     * A default user-agent to use if one is needed, but none have been loaded
+     * yet. This should occur very rarely.
+     */
+    var defaultUserAgent = 'Mozilla/5.0 (Windows NT 6.0; WOW64; rv:24.0) ' +
+        'Gecko/20100101 Firefox/24.0';
 
     /**
      * Initialize the service. This should only be called once per browser
@@ -142,8 +155,6 @@ var H1Database = (function() {
     };
 
     var loadUAStrings = function() {
-        dump('Loading some UA strings\n');
-
         let defsFile = FileUtils.getFile(
             PROFILE_DIR,
             [ EXTENSION_DIR, DEFINITION_FILE ]
@@ -151,7 +162,9 @@ var H1Database = (function() {
 
         NetUtil.asyncFetch(defsFile, function(inStream, result) {
             if (!Components.isSuccessCode(result)) {
-                throw 'error';
+                throw {
+                    message: 'Unable to open UA definitions file'
+                };
             }
 
             let unparsed = NetUtil.readInputStreamToString(
@@ -169,8 +182,28 @@ var H1Database = (function() {
         });
     };
 
+    /**
+     * Get a singe UA string from the cache. This will trigger loading of more 
+     * UA strings if the lower-bound is reached.
+     */
     var getUAString = function() {
+        dump('Giving UA: ' + uaCache[uaCache.length - 1]);
 
+        // Defer loading of more UA strings until this function returns
+        if (uaCache.length == MIN_CACHE_SIZE + 1) {
+            setTimeout(loadUAStrings, 0);
+        }
+        // BALLMER PEAK GO
+        if (uaCache.length > 1) {
+            return uaCache.pop();
+        }
+
+        if (uaCache.legth == 1) {
+            // Never destroy the last available user agent string
+            return uaCache[0];
+        }
+
+        return defaultUserAgent;
     };
 
     /**
@@ -178,9 +211,6 @@ var H1Database = (function() {
      */
     var arrayRand = function(arr) {
         let idx = Math.floor(Math.random() * arr.length);
-
-        dump('generated index: ' + idx + '\n');
-
         return arr[idx];
     };
 
