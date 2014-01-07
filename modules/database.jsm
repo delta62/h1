@@ -142,7 +142,7 @@ var H1Database = (function() {
     };
 
     var loadUAStrings = function() {
-        dump('Loading some UA strings');
+        dump('Loading some UA strings\n');
 
         let defsFile = FileUtils.getFile(
             PROFILE_DIR,
@@ -161,9 +161,8 @@ var H1Database = (function() {
 
             let lines = unparsed.split(/\r?\n/);
             while (uaCache.length < CACHE_SIZE) {
-                dump('Testing ' + item + '\n');
                 let item = arrayRand(lines);
-                if (!/^(#.*)|(\s*)$/.test(item)) {
+                if (!/(^#.*$)|(^\s*$)/m.test(item)) {
                     uaCache.push(item);
                 }
             }
@@ -178,9 +177,10 @@ var H1Database = (function() {
      * Get a random element out of an array
      */
     var arrayRand = function(arr) {
-        let min = 0;
-        let max = arr.length;
-        let idx = Math.random() * (max - min) + min;
+        let idx = Math.floor(Math.random() * arr.length);
+
+        dump('generated index: ' + idx + '\n');
+
         return arr[idx];
     };
 
