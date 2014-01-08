@@ -47,6 +47,11 @@ var H1Networking = (function() {
     var observer = function(subject, topic, data) {
         subject.QueryInterface(Ci.nsIHttpChannel);
 
+        if (H1Database.isAllowed(subject.URI)) {
+            // Do nothing if the URI was whitelisted
+            return;
+        }
+
         if (!preferences['referer.allow']) {
             // Strip HTTP referer header
             subject.referrer = null;
@@ -69,19 +74,6 @@ var H1Networking = (function() {
             let ua = H1Database.nextUA();
             subject.setRequestHeader('User-Agent', ua, false);
         }
-    };
-
-    /**
-     * Converts an nsIURI object into a human-readable string
-     */
-    var uriToString = function(uri) {
-        dump(
-            uri.scheme
-            + '://'
-            + uri.host
-            + uri.path
-            + '\n'
-        );
     };
 
     if (!initialized) {

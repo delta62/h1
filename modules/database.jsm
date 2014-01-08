@@ -35,6 +35,11 @@ const EXTENSION_DIR = 'h1';
  */
 const DEFINITION_FILE = 'ua.def';
 
+/**
+ * Preference key for the h1 whitelist data
+ */
+const PREF_WHITELIST     = 'extensions.h1.whitelist';
+
 // Import required services
 Components.utils.import('resource://gre/modules/AddonManager.jsm');
 Components.utils.import('resource://gre/modules/FileUtils.jsm');
@@ -61,11 +66,11 @@ var H1Database = (function() {
     /**
      * An array of user-agent strings that should be used. This acts as a stack,
      * loading more random UA strings when it starts running low. If a
-     * request is made but no UA strings are available, the real UA of the
-     * browser is sent. If the last UA string is consumed, it will be repeatedly
-     * re-used until more are made available. Thus, the only time the real UA is
-     * sent is when either the random UA coincides with the real one, or when
-     * requests are made before random UA strings can be loaded.
+     * request is made but no UA strings are available, the default UA is sent.
+     * If the last UA string is consumed, it will be repeatedly re-used until
+     * more are made available. Thus, the only time the real UA is sent is when
+     * either the random UA coincides with the real one, or when requests are
+     * made before random UA strings can be loaded.
      */
     var uaCache = [ ];
 
@@ -77,6 +82,14 @@ var H1Database = (function() {
         'Gecko/20100101 Firefox/24.0';
 
     /**
+     * The whitelist is persisted via a Firefox preference, as a string of space
+     * separated domains (identical to the format of NoScript). The service's 
+     * whitelist variable is kept in-sync with said preference to allow a faster
+     * lookup at runtime.
+     */
+    var whitelist = '';
+
+    /**
      * Initialize the service. This should only be called once per browser
      * instance. Upon initialization, CACHE_SIZE user agent strings will be
      * available for consupmtion. If a request is made before the cache is
@@ -84,6 +97,7 @@ var H1Database = (function() {
      */
     var init = function() {
         checkInstalled();
+        loadWhitelist();
     };
 
     /**
@@ -183,12 +197,19 @@ var H1Database = (function() {
     };
 
     /**
+     * Load the whitelist from Firefox's preferences system
+     */
+    var loadWhitelist = function() {
+        let prefService = Cc['@mozilla.org/preferences-service;1']
+            .getService(Ci.nsIPrefBranch);
+        whitelist = prefService.getCharPref(PREF_WHITELIST);
+    };
+
+    /**
      * Get a singe UA string from the cache. This will trigger loading of more 
      * UA strings if the lower-bound is reached.
      */
     var getUAString = function() {
-        dump('Giving UA: ' + uaCache[uaCache.length - 1]);
-
         // Defer loading of more UA strings until this function returns
         if (uaCache.length == MIN_CACHE_SIZE + 1) {
             setTimeout(loadUAStrings, 0);
@@ -214,12 +235,47 @@ var H1Database = (function() {
         return arr[idx];
     };
 
+    /**
+     * Whitelist a URI. This will disable all features of h1 for the given
+     * domain.
+     */
+    var allowURI = function(uri) {
+        let prefService = Cc['@mozilla.org/preferences-service;1']
+            .getService(Ci.nsIPrefBranch);
+
+        whitelist += parseURI(uri) + ' ';
+        prefService.setCharPref(PREF_WHITELIST, whitelist);
+    };
+
+    /**
+     * Check to see if a URI has been whitelisted. Returns true if the given
+     * URI's domain is whitelisted, or false otherwise. 
+     * @param uri An nsIURI object
+     */
+    var checkURI = function(uri) {
+        dump('Testing " ' + parseURI(uri) + ' " against "' + whitelist + '".\n');
+        let re = new RegExp(' ' + parseURI(uri) + ' ');
+        return re.test(whitelist);
+    };
+
+    /**
+     * Return the host part of a URI, which is the internal method of deciding
+     * if a given URI should be whitelisted or not.
+     * @param uri An nsIURI object
+     */
+    var parseURI = function(uri) {
+        return uri.asciiHost;
+    };
+
     if (!initialized) {
         init();
     }
 
     return {
-        nextUA: getUAString
+        nextUA:    getUAString,
+        allowURI:  allowURI,
+        isAllowed: checkURI,
+        parseURI:  parseURI
     };
 
 })();
