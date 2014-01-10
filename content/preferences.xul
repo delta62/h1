@@ -42,11 +42,30 @@
 
     <prefpane id="h1-prefs-whitelist" label="&h1.prefs.whitelist;">
 
-        <listbox>
-            <listitem label="a" />
-            <listitem label="b" />
-            <listitem label="c" />
-        </listbox>
+        <vbox>
+
+            <description id="h1-whitelist-description" />
+
+            <separator />
+
+            <label control="h1-whitelist-uri"
+                value="&h1.prefs.whitelist.addprompt;" />
+            <hbox>
+                <textbox id="h1-whitelist-uri" flex="1" />
+                <button id="h1-whitelist-add"
+                    label="&h1.prefs.whitelist.add;" />
+            </hbox>
+            <listbox seltype="multiple">
+                <listitem label="a" />
+                <listitem label="b" />
+                <listitem label="c" />
+            </listbox>
+            <hbox>
+                <button id="h1-whitelist-remove" flex="0" disabled="true"
+                    label="&h1.prefs.whitelist.remove;" />
+            </hbox>
+
+        </vbox>
 
     </prefpane>
 

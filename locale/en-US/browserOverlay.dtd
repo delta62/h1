@@ -16,3 +16,10 @@
 <!ENTITY h1.prefs.etag.allow    "Allow HTTP ETag headers">
 <!ENTITY h1.prefs.etag.notify   "Notify me when a site is using ETags">
 <!ENTITY h1.prefs.ua.mangle     "Randomize User-Agent string">
+
+<!-- Whitelist labels -->
+<!ENTITY h1.prefs.whitelist.desc "This is where you put a bunch of text 
+    describing how the whitelist works.">
+<!ENTITY h1.prefs.whitelist.addprompt "Address of web site:">
+<!ENTITY h1.prefs.whitelist.add "Add">
+<!ENTITY h1.prefs.whitelist.remove "Remove Selected Sites">
