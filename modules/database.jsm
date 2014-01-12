@@ -38,7 +38,7 @@ const DEFINITION_FILE = 'ua.def';
 /**
  * Preference key for the h1 whitelist data
  */
-const PREF_WHITELIST     = 'extensions.h1.whitelist';
+const PREF_WHITELIST = 'extensions.h1.whitelist';
 
 // Import required services
 Components.utils.import('resource://gre/modules/AddonManager.jsm');
@@ -168,6 +168,9 @@ var H1Database = (function() {
         channel.asyncOpen(handler, null);
     };
 
+    /**
+     * Load CACHE_SIZE UA strings into memory from disk
+     */
     var loadUAStrings = function() {
         let defsFile = FileUtils.getFile(
             PROFILE_DIR,
@@ -237,14 +240,32 @@ var H1Database = (function() {
 
     /**
      * Whitelist a URI. This will disable all features of h1 for the given
-     * domain.
+     * domain. Will throw an error if the URI is invalid.
+     * @param uri Either a URI string, or an nsIURI object
      */
     var allowURI = function(uri) {
+        if (!(uri instanceof Ci.nsIURI)) {
+            if (!/:\/\//.test(uri)) {
+                uri = 'http://' + uri;
+            }
+            let ioService = Cc['@mozilla.org/network/io-service;1']
+                .getService(Ci.nsIIOService);
+            uri = ioService.newURI(uri, null, null);
+        }
+        dump('Added URI: ' + uri.asciiHost + '\n');
+
         let prefService = Cc['@mozilla.org/preferences-service;1']
             .getService(Ci.nsIPrefBranch);
-
         whitelist += parseURI(uri) + ' ';
         prefService.setCharPref(PREF_WHITELIST, whitelist);
+    };
+
+    /**
+     * Retrieve all whitelisted URIs from the database
+     * @returns
+     */
+    var allURIs = function() {
+        return whitelist.split(' ');
     };
 
     /**
