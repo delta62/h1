@@ -265,7 +265,12 @@ var H1Database = (function() {
      * @returns
      */
     var allURIs = function() {
-        return whitelist.split(' ');
+        let split = whitelist.split(/\s+/);
+        // Remove empty elements
+        for (let i = 0; i < split.length; i += 1) {
+            split.splice(i, 1);
+        }
+        return split.sort();
     };
 
     /**
@@ -296,7 +301,8 @@ var H1Database = (function() {
         nextUA:    getUAString,
         allowURI:  allowURI,
         isAllowed: checkURI,
-        parseURI:  parseURI
+        parseURI:  parseURI,
+        allURIs:   allURIs
     };
 
 })();

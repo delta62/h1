@@ -7,7 +7,7 @@
 
 <prefwindow title="&h1.prefs.title;"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-    onunload="H1.Preferences.unload(event)">
+    onload="H1.Preferences.load()">
 
     <script type="application/javascript"
         src="chrome://h1/content/preferences.js" />
@@ -55,11 +55,7 @@
                 <button id="h1-whitelist-add" oncommand="H1.Preferences.add()"
                     label="&h1.prefs.whitelist.add;" />
             </hbox>
-            <listbox seltype="multiple">
-                <listitem label="a" />
-                <listitem label="b" />
-                <listitem label="c" />
-            </listbox>
+            <listbox id="h1-whitelist" seltype="multiple" />
             <hbox>
                 <button id="h1-whitelist-remove" flex="0" disabled="true"
                     label="&h1.prefs.whitelist.remove;" />
