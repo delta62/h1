@@ -244,13 +244,8 @@ var H1Database = (function() {
      * @param uri Either a URI string, or an nsIURI object
      */
     var allowURI = function(uri) {
-        if (!(uri instanceof Ci.nsIURI)) {
-            if (!/:\/\//.test(uri)) {
-                uri = 'http://' + uri;
-            }
-            let ioService = Cc['@mozilla.org/network/io-service;1']
-                .getService(Ci.nsIIOService);
-            uri = ioService.newURI(uri, null, null);
+        if (!uri instanceof Ci.nsIURI) {
+            uri = uriFromString(uri);
         }
         dump('Added URI: ' + uri.asciiHost + '\n');
 
@@ -259,6 +254,25 @@ var H1Database = (function() {
         whitelist += parseURI(uri) + ' ';
         prefService.setCharPref(PREF_WHITELIST, whitelist);
     };
+
+    /**
+     * Remove a URI from the whitelist. If the URI is not whitelisted, this is a
+     * no-op.
+     * @param uri Either a URI string, or an nsIURI object
+     */
+    var disallowURI = function(uri) {
+        // Normalize URI
+        if (! uri instanceof Ci.nsIURI) {
+            uri = uriFromString(uri);
+        }
+        uri = parseURI(uri);
+
+        // Update state
+        let prefService = Cc['@mozilla.org/preferences-service;1']
+            .getService(Ci.nsIPrefBranch);
+        whitelist.replace(uri + ' ', '');
+        prefService.setCharPref(PREF_WHITELIST, whitelist);
+    }
 
     /**
      * Retrieve all whitelisted URIs from the database
@@ -293,16 +307,30 @@ var H1Database = (function() {
         return uri.asciiHost;
     };
 
+    /**
+     * Attempt to create an nsIURI object from a string. Throws an error if the
+     * string is not a valid URI.
+     */
+    var uriFromString = function(uriString) {
+        if (!/:\/\//.test(uriString)) {
+            uriString = 'http://' + uriString;
+        }
+        let ioService = Cc['@mozilla.org/network/io-service;1']
+            .getService(Ci.nsIIOService);
+        return ioService.newURI(uriString, null, null);
+    };
+
     if (!initialized) {
         init();
     }
 
     return {
-        nextUA:    getUAString,
-        allowURI:  allowURI,
-        isAllowed: checkURI,
-        parseURI:  parseURI,
-        allURIs:   allURIs
+        nextUA:      getUAString,
+        allowURI:    allowURI,
+        disallowURI: disallowURI,
+        isAllowed:   checkURI,
+        parseURI:    parseURI,
+        allURIs:     allURIs
     };
 
 })();

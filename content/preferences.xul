@@ -55,10 +55,12 @@
                 <button id="h1-whitelist-add" oncommand="H1.Preferences.add()"
                     label="&h1.prefs.whitelist.add;" />
             </hbox>
-            <listbox id="h1-whitelist" seltype="multiple" />
+            <listbox id="h1-whitelist" seltype="multiple"
+                onselect="H1.Preferences.enableRemove()" />
             <hbox>
                 <button id="h1-whitelist-remove" flex="0" disabled="true"
-                    label="&h1.prefs.whitelist.remove;" />
+                    label="&h1.prefs.whitelist.remove;"
+                    oncommand="H1.Preferences.remove()" />
             </hbox>
 
         </vbox>

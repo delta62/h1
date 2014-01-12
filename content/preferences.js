@@ -9,6 +9,9 @@ Components.utils.import('resource://h1/database.jsm');
 
 H1.Preferences = {
 
+    /**
+     * Handle clicks on the 'add to whitelist' button
+     */
     add: function() {
         let textbox = document.getElementById('h1-whitelist-uri');
         try {
@@ -36,6 +39,36 @@ H1.Preferences = {
             dump('Adding ' + whitelist[i] + ' to listbox.\n');
             listbox.appendItem(whitelist[i]);
         }
+    },
+
+    /**
+     * Disable the delete button
+     */
+    enableRemove: function() {
+        document.getElementById('h1-whitelist-remove').disabled = false;
+    },
+
+    /**
+     * Disable the delete button
+     */
+    disableRemove: function() {
+        document.getElementById('h1-whitelist-remove').disabled = true;
+    },
+
+    /**
+     * Remove the selected item(s) from the whitelist database
+     */
+    remove: function() {
+        let items = document.getElementById('h1-whitelist').selectedItems;
+        for (let i = 0; i < items.length; i += 1) {
+            let item = items[i];
+            H1Database.disallowURI(item.label);
+        }
+
+        // Re-load listbox contents
+        H1.Preferences.load();
+        // Disable remove button
+        H1.Preferences.disableRemove();
     }
 
 };
