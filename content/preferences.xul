@@ -12,32 +12,30 @@
     <script type="application/javascript"
         src="chrome://h1/content/preferences.js" />
 
-    <prefpane id="h1-prefs-etag" label="&h1.prefs.etags;">
+    <prefpane id="h1-prefs-etag" label="&h1.prefs;">
         <preferences>
             <preference id="allow-etag" name="extensions.h1.etag.allow" type="bool" />
             <preference id="notify-etag" name="extensions.h1.etag.notify" type="bool" />
-        </preferences>
-
-        <checkbox label="&h1.prefs.etag.allow;" preference="allow-etag" />
-        <checkbox label="&h1.prefs.etag.notify;" preference="notify-etag" />
-
-    </prefpane>
-
-    <prefpane id="h1-prefs-referer" label="&h1.prefs.referer;">
-        <preferences>
             <preference id="allow-referer" name="extensions.h1.referer.allow" type="bool" />
-        </preferences>
-
-        <checkbox label="&h1.prefs.referer.allow;" preference="allow-referer" />
-
-    </prefpane>
-
-    <prefpane id="h1-prefs-ua" label="&h1.prefs.ua;">
-        <preferences>
             <preference id="mangle-ua" name="extensions.h1.ua.mangle" type="bool" />
         </preferences>
 
-        <checkbox label="&h1.prefs.ua.mangle;" preference="mangle-ua" />
+        <groupbox>
+            <caption label="&h1.prefs.etags;" />
+            <checkbox label="&h1.prefs.etag.allow;" preference="allow-etag" />
+            <checkbox label="&h1.prefs.etag.notify;" preference="notify-etag" />
+        </groupbox>
+
+        <groupbox>
+            <caption label="&h1.prefs.referer;" />
+            <checkbox label="&h1.prefs.referer.allow;" preference="allow-referer" />
+        </groupbox>
+
+        <groupbox>
+            <caption label="&h1.prefs.ua;" />
+            <checkbox label="&h1.prefs.ua.mangle;" preference="mangle-ua" />
+        </groupbox>
+
     </prefpane>
 
     <prefpane id="h1-prefs-whitelist" label="&h1.prefs.whitelist;">

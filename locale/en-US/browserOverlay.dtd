@@ -6,6 +6,7 @@
 <!ENTITY h1.prefs.title "H1 Preferences">
 
 <!-- Preference Tabs -->
+<!ENTITY h1.prefs           "Preferences">
 <!ENTITY h1.prefs.etags     "ETags">
 <!ENTITY h1.prefs.referer   "Referrer">
 <!ENTITY h1.prefs.ua        "User Agent">
