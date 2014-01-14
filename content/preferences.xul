@@ -54,7 +54,7 @@
                     label="&h1.prefs.whitelist.add;" />
             </hbox>
             <listbox id="h1-whitelist" seltype="multiple"
-                onselect="H1.Preferences.enableRemove()" />
+                onselect="H1.Preferences.toggleRemove(true)" />
             <hbox>
                 <button id="h1-whitelist-remove" flex="0" disabled="true"
                     label="&h1.prefs.whitelist.remove;"

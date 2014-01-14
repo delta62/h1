@@ -244,8 +244,14 @@ var H1Database = (function() {
      * @param uri Either a URI string, or an nsIURI object
      */
     var allowURI = function(uri) {
-        if (!uri instanceof Ci.nsIURI) {
+        if (!(uri instanceof Ci.nsIURI)) {
             uri = uriFromString(uri);
+        }
+
+        let checker = new RegExp(' ' + parseURI(uri) + ' ');
+        if (checker.test(whitelist)) {
+            dump(parseURI(uri) + ' has already been added!');
+            return;
         }
         dump('Added URI: ' + uri.asciiHost + '\n');
 
@@ -262,7 +268,7 @@ var H1Database = (function() {
      */
     var disallowURI = function(uri) {
         // Normalize URI
-        if (! uri instanceof Ci.nsIURI) {
+        if (!(uri instanceof Ci.nsIURI)) {
             uri = uriFromString(uri);
         }
         uri = parseURI(uri);
@@ -283,6 +289,7 @@ var H1Database = (function() {
         // Remove empty elements
         for (let i = 0; i < split.length; i += 1) {
             split.splice(i, 1);
+            i -= 1;
         }
         return split.sort();
     };
@@ -315,6 +322,9 @@ var H1Database = (function() {
         if (!/:\/\//.test(uriString)) {
             uriString = 'http://' + uriString;
         }
+
+        dump('Creating nsIURI for "' + uriString + '"\n');
+
         let ioService = Cc['@mozilla.org/network/io-service;1']
             .getService(Ci.nsIIOService);
         return ioService.newURI(uriString, null, null);

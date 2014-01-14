@@ -15,7 +15,7 @@
 
         <toolbarbutton id="h1-preferences-button"
             class="toolbarbutton-1 chromeclass-toolbar-additional"
-            label="&h1.toolbarbutton.label;"
+            label="&h1.prefs.title;"
             tooltiptext="&h1.toolbarbutton.tooltip;"
             oncommand="H1.showPreferences(event)" />
 
