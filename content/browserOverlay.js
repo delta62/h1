@@ -4,7 +4,7 @@ var H1 = H1 || { };
 H1.preferenceWindow = null;
 
 H1.showPreferences = function(e) {
-    if (H1.preferenceWindow == null) {
+    if (H1.preferenceWindow == null || H1.preferenceWindow.closed) {
         let instantApply = Application.prefs
             .get('browser.preferences.instantApply');
         let features = 'chrome,titlebar,toolbar,centerscreen' +
