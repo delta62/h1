@@ -253,7 +253,6 @@ var H1Database = (function() {
             dump(parseURI(uri) + ' has already been added!');
             return;
         }
-        dump('Added URI: ' + parseURI(uri) + '\n');
 
         whitelist += parseURI(uri) + ' ';
 
@@ -273,8 +272,6 @@ var H1Database = (function() {
             uri = uriFromString(uri);
         }
         uri = parseURI(uri);
-
-        dump('Removing "' + uri + '"\n');
 
         // Update state
         let prefService = Cc['@mozilla.org/preferences-service;1']
@@ -305,7 +302,6 @@ var H1Database = (function() {
      * @param uri An nsIURI object
      */
     var checkURI = function(uri) {
-        dump('Testing " ' + parseURI(uri) + ' " against "' + whitelist + '".\n');
         let re = new RegExp(' ' + parseURI(uri) + ' ');
         return re.test(whitelist);
     };
@@ -328,11 +324,13 @@ var H1Database = (function() {
             uriString = 'http://' + uriString;
         }
 
-        dump('Creating nsIURI for "' + uriString + '"\n');
-
         let ioService = Cc['@mozilla.org/network/io-service;1']
             .getService(Ci.nsIIOService);
-        return ioService.newURI(uriString, null, null);
+        let uri = ioService.newURI(uriString, null, null);
+        if (parseURI(uri) == '') {
+            throw { message: 'Invalid URI specified' };
+        }
+        return uri;
     };
 
     if (!initialized) {

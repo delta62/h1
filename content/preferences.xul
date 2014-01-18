@@ -15,7 +15,6 @@
     <prefpane id="h1-prefs-etag" label="&h1.prefs;">
         <preferences>
             <preference id="allow-etag" name="extensions.h1.etag.allow" type="bool" />
-            <preference id="notify-etag" name="extensions.h1.etag.notify" type="bool" />
             <preference id="allow-referer" name="extensions.h1.referer.allow" type="bool" />
             <preference id="mangle-ua" name="extensions.h1.ua.mangle" type="bool" />
         </preferences>
@@ -23,7 +22,6 @@
         <groupbox>
             <caption label="&h1.prefs.etags;" />
             <checkbox label="&h1.prefs.etag.allow;" preference="allow-etag" />
-            <checkbox label="&h1.prefs.etag.notify;" preference="notify-etag" />
         </groupbox>
 
         <groupbox>

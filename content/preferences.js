@@ -19,7 +19,13 @@ H1.Preferences = {
             H1.Preferences.load();
             textbox.value = '';
         } catch (ex) {
-            throw ex;
+            let promptService = Cc['@mozilla.org/embedcomp/prompt-service;1']
+                .getService(Ci.nsIPromptService);
+            promptService.alert(
+                null,
+                'Unable to add site',
+                '"' + textbox.value + '" is not a valid site name.'
+            );
         }
     },
 
