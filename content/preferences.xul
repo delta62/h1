@@ -49,7 +49,8 @@
             <label control="h1-whitelist-uri"
                 value="&h1.prefs.whitelist.addprompt;" />
             <hbox>
-                <textbox id="h1-whitelist-uri" flex="1" />
+                <textbox id="h1-whitelist-uri" flex="1"
+                    onkeydown="H1.Preferences.keySubmit(event)" />
                 <button id="h1-whitelist-add" oncommand="H1.Preferences.add()"
                     label="&h1.prefs.whitelist.add;" />
             </hbox>

@@ -15,12 +15,11 @@ H1.Preferences = {
     add: function() {
         let textbox = document.getElementById('h1-whitelist-uri');
         try {
-            dump('Attempting to add "' + textbox.value + '"\n');
             H1Database.allowURI(textbox.value);
+            H1.Preferences.load();
             textbox.value = '';
         } catch (ex) {
             throw ex;
-            // dump('Invalid URI, cannot add.\n');
         }
     },
 
@@ -38,7 +37,6 @@ H1.Preferences = {
         // Add whitelist items
         let whitelist = H1Database.allURIs();
         for (let i = 0; i < whitelist.length; i += 1) {
-            dump('Adding "' + whitelist[i] + '" to listbox.\n');
             listbox.appendItem(whitelist[i]);
         }
     },
@@ -59,7 +57,6 @@ H1.Preferences = {
         let items = document.getElementById('h1-whitelist').selectedItems;
         for (let i = 0; i < items.length; i += 1) {
             let item = items[i];
-            dump('Attempting to remove "' + item.label + '"\n');
             H1Database.disallowURI(item.label);
         }
 
@@ -67,6 +64,17 @@ H1.Preferences = {
         H1.Preferences.load();
         // Disable remove button
         H1.Preferences.toggleRemove(false);
+    },
+
+    /**
+     * Intercept pressing the <ENTER> key in the add URI textbox
+     */
+    keySubmit: function(event) {
+        if (event.keyCode == 13) {
+            H1.Preferences.add();
+            // Stop the entire dialog from being accepted
+            event.preventDefault();
+        }
     }
 
 };

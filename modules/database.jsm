@@ -253,11 +253,12 @@ var H1Database = (function() {
             dump(parseURI(uri) + ' has already been added!');
             return;
         }
-        dump('Added URI: ' + uri.asciiHost + '\n');
+        dump('Added URI: ' + parseURI(uri) + '\n');
+
+        whitelist += parseURI(uri) + ' ';
 
         let prefService = Cc['@mozilla.org/preferences-service;1']
             .getService(Ci.nsIPrefBranch);
-        whitelist += parseURI(uri) + ' ';
         prefService.setCharPref(PREF_WHITELIST, whitelist);
     };
 
@@ -273,10 +274,12 @@ var H1Database = (function() {
         }
         uri = parseURI(uri);
 
+        dump('Removing "' + uri + '"\n');
+
         // Update state
         let prefService = Cc['@mozilla.org/preferences-service;1']
             .getService(Ci.nsIPrefBranch);
-        whitelist.replace(uri + ' ', '');
+        whitelist = whitelist.replace(uri + ' ', '');
         prefService.setCharPref(PREF_WHITELIST, whitelist);
     }
 
@@ -285,13 +288,15 @@ var H1Database = (function() {
      * @returns
      */
     var allURIs = function() {
-        let split = whitelist.split(/\s+/);
-        // Remove empty elements
-        for (let i = 0; i < split.length; i += 1) {
-            split.splice(i, 1);
-            i -= 1;
+        let items = whitelist.split(/\s+/);
+        // Remove empty strings
+        for (let i = 0; i < items.length; i += 1) {
+            if (items[i] == '') {
+                items.splice(i, 1);
+                i -= 1;
+            }
         }
-        return split.sort();
+        return items.sort();
     };
 
     /**
