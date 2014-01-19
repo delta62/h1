@@ -83,7 +83,6 @@ var H1Networking = (function() {
                 prefCache[data] = subject.getBoolPref(data);
 
                 if (data == PREF_USE_NOSCRIPT) {
-                    dump('Loading NoScript\n');
                     H1Database.loadNoScript();
                 }
             }

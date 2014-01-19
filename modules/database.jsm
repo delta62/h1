@@ -264,7 +264,7 @@ var H1Database = (function() {
 
         let checker = new RegExp('\\s' + parseURI(uri) + '\\s');
         if (checker.test(' ' + whitelist + ' ')) {
-            dump(parseURI(uri) + ' has already been added!');
+            // The URI has already been added
             return;
         }
 
@@ -322,15 +322,10 @@ var H1Database = (function() {
         let m;
 
         if (useNoScript) {
-            dump('noscript branch\n');
             m = re.test(' ' + noscriptService.jsPolicySites.sitesString + ' ');
-            dump('Testing "' + re + '" against "' + ' ' + noscriptService.jsPolicySites.sitesString + ' ' + '"... ');
         } else {
-            dump('Testing "' + re + '" against "' + ' ' + whitelist + ' ' + '"... ');
             m = re.test(' ' + whitelist + ' ');
         }
-
-        dump(m + '\n');
 
         return m;
     };
