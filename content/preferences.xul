@@ -14,9 +14,12 @@
 
     <prefpane id="h1-prefs-etag" label="&h1.prefs;">
         <preferences>
-            <preference id="allow-etag" name="extensions.h1.etag.allow" type="bool" />
-            <preference id="allow-referer" name="extensions.h1.referer.allow" type="bool" />
-            <preference id="mangle-ua" name="extensions.h1.ua.mangle" type="bool" />
+            <preference id="allow-etag" name="extensions.h1.etag.allow"
+                type="bool" />
+            <preference id="allow-referer" name="extensions.h1.referer.allow"
+                type="bool" />
+            <preference id="mangle-ua" name="extensions.h1.ua.mangle"
+                type="bool" />
         </preferences>
 
         <groupbox>
@@ -26,7 +29,8 @@
 
         <groupbox>
             <caption label="&h1.prefs.referer;" />
-            <checkbox label="&h1.prefs.referer.allow;" preference="allow-referer" />
+            <checkbox label="&h1.prefs.referer.allow;"
+                preference="allow-referer" />
         </groupbox>
 
         <groupbox>
@@ -37,6 +41,10 @@
     </prefpane>
 
     <prefpane id="h1-prefs-whitelist" label="&h1.prefs.whitelist;">
+        <preferences>
+            <preference id="noscript-whitelist"
+                name="extensions.h1.whitelist.noscript" type="bool" />
+        </preferences>
 
         <vbox>
 
@@ -44,21 +52,32 @@
 
             <separator />
 
-            <label control="h1-whitelist-uri"
-                value="&h1.prefs.whitelist.addprompt;" />
-            <hbox>
-                <textbox id="h1-whitelist-uri" flex="1"
-                    onkeydown="H1.Preferences.keySubmit(event)" />
-                <button id="h1-whitelist-add" oncommand="H1.Preferences.add()"
-                    label="&h1.prefs.whitelist.add;" />
-            </hbox>
-            <listbox id="h1-whitelist" seltype="multiple"
-                onselect="H1.Preferences.toggleRemove(true)" />
-            <hbox>
-                <button id="h1-whitelist-remove" flex="0" disabled="true"
-                    label="&h1.prefs.whitelist.remove;"
-                    oncommand="H1.Preferences.remove()" />
-            </hbox>
+            <groupbox>
+                <caption label="&h1.prefs.whitelist.noscript;" />
+                <checkbox id="h1-use-noscript"
+                    label="&h1.prefs.whitelist.noscript-missing;"
+                    preference="noscript-whitelist" disabled="true" />
+            </groupbox>
+
+            <groupbox>
+                <caption label="&h1.prefs.whitelist;" />
+                <label control="h1-whitelist-uri"
+                    value="&h1.prefs.whitelist.addprompt;" />
+                <hbox>
+                    <textbox id="h1-whitelist-uri" flex="1"
+                        onkeydown="H1.Preferences.keySubmit(event)" />
+                    <button id="h1-whitelist-add"
+                        oncommand="H1.Preferences.add()"
+                        label="&h1.prefs.whitelist.add;" />
+                </hbox>
+                <listbox id="h1-whitelist" seltype="multiple"
+                    onselect="H1.Preferences.toggleRemove(true)" />
+                <hbox>
+                    <button id="h1-whitelist-remove" flex="0" disabled="true"
+                        label="&h1.prefs.whitelist.remove;"
+                        oncommand="H1.Preferences.remove()" />
+                </hbox>
+            </groupbox>
 
         </vbox>
 
