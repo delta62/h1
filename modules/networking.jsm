@@ -19,6 +19,7 @@ const PREF_BRANCH = 'extensions.h1.';
 const PREF_ETAG_ALLOW    = 'etag.allow';
 const PREF_REFERER_ALLOW = 'referer.allow';
 const PREF_UA_MANGLE     = 'ua.mangle';
+const PREF_USE_NOSCRIPT  = 'whitelist.noscript';
 
 var H1Networking = (function() {
 
@@ -39,7 +40,8 @@ var H1Networking = (function() {
     var prefCache = {
         PREF_ETAG_ALLOW:    true,
         PREF_REFERER_ALLOW: false,
-        PREF_UA_MANGLE:     true
+        PREF_UA_MANGLE:     true,
+        PREF_USE_NOSCRIPT:  false
     };
 
     /**
@@ -56,6 +58,12 @@ var H1Networking = (function() {
         prefCache[PREF_REFERER_ALLOW] = 
             prefBranch.getBoolPref(PREF_REFERER_ALLOW);
         prefCache[PREF_UA_MANGLE] = prefBranch.getBoolPref(PREF_UA_MANGLE);
+        prefCache[PREF_USE_NOSCRIPT] =
+            prefBranch.getBoolPref(PREF_USE_NOSCRIPT);
+
+        if (prefCache[PREF_USE_NOSCRIPT]) {
+            H1Database.loadNoScript();
+        }
 
         // Listen for network requests
         observerService.addObserver(observer, TOPIC_MODIFY_REQUEST, false);
@@ -73,6 +81,11 @@ var H1Networking = (function() {
             if (prefCache[data] != undefined) {
                 // Update the preference cache
                 prefCache[data] = subject.getBoolPref(data);
+
+                if (data == PREF_USE_NOSCRIPT) {
+                    dump('Loading NoScript\n');
+                    H1Database.loadNoScript();
+                }
             }
         }
     };
@@ -84,7 +97,7 @@ var H1Networking = (function() {
     var observer = function(subject, topic, data) {
         subject.QueryInterface(Ci.nsIHttpChannel);
 
-        if (H1Database.isAllowed(subject.URI)) {
+        if (H1Database.isAllowed(subject.URI, prefCache[PREF_USE_NOSCRIPT])) {
             // Do nothing if the URI was whitelisted
             return;
         }

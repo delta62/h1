@@ -90,6 +90,12 @@ var H1Database = (function() {
     var whitelist = '';
 
     /**
+     * Local reference to the noscript service. Will be null if NoScript support
+     * 
+     */
+    var noscriptService = null;
+
+    /**
      * Initialize the service. This should only be called once per browser
      * instance. Upon initialization, CACHE_SIZE user agent strings will be
      * available for consupmtion. If a request is made before the cache is
@@ -209,6 +215,14 @@ var H1Database = (function() {
     };
 
     /**
+     * Load the NoScript service
+     */
+    var loadNoScript = function() {
+        noscriptService = Cc['@maone.net/noscript-service;1'].getService()
+            .wrappedJSObject;
+    };
+
+    /**
      * Get a singe UA string from the cache. This will trigger loading of more 
      * UA strings if the lower-bound is reached.
      */
@@ -248,13 +262,13 @@ var H1Database = (function() {
             uri = uriFromString(uri);
         }
 
-        let checker = new RegExp(' ' + parseURI(uri) + ' ');
-        if (checker.test(whitelist)) {
+        let checker = new RegExp('\\s' + parseURI(uri) + '\\s');
+        if (checker.test(' ' + whitelist + ' ')) {
             dump(parseURI(uri) + ' has already been added!');
             return;
         }
 
-        whitelist += parseURI(uri) + ' ';
+        whitelist += ' ' + parseURI(uri);
 
         let prefService = Cc['@mozilla.org/preferences-service;1']
             .getService(Ci.nsIPrefBranch);
@@ -276,7 +290,7 @@ var H1Database = (function() {
         // Update state
         let prefService = Cc['@mozilla.org/preferences-service;1']
             .getService(Ci.nsIPrefBranch);
-        whitelist = whitelist.replace(uri + ' ', '');
+        whitelist = (' ' + whitelist + ' ').replace(' ' + uri + ' ', ' ').trim();
         prefService.setCharPref(PREF_WHITELIST, whitelist);
     }
 
@@ -304,13 +318,21 @@ var H1Database = (function() {
      *     of h1's whitelist
      */
     var checkURI = function(uri, useNoScript) {
-        let re = new RegExp(' ' + parseURI(uri) + ' ');
+        let re = new RegExp('\\s' + parseURI(uri) + '\\s');
+        let m;
 
         if (useNoScript) {
-            re.test(noscriptUtil.service.jsPolicySites.sitesString);
+            dump('noscript branch\n');
+            m = re.test(' ' + noscriptService.jsPolicySites.sitesString + ' ');
+            dump('Testing "' + re + '" against "' + ' ' + noscriptService.jsPolicySites.sitesString + ' ' + '"... ');
         } else {
-            return re.test(whitelist);
+            dump('Testing "' + re + '" against "' + ' ' + whitelist + ' ' + '"... ');
+            m = re.test(' ' + whitelist + ' ');
         }
+
+        dump(m + '\n');
+
+        return m;
     };
 
     /**
@@ -345,12 +367,13 @@ var H1Database = (function() {
     }
 
     return {
-        nextUA:      getUAString,
-        allowURI:    allowURI,
-        disallowURI: disallowURI,
-        isAllowed:   checkURI,
-        parseURI:    parseURI,
-        allURIs:     allURIs
+        nextUA:       getUAString,
+        allowURI:     allowURI,
+        disallowURI:  disallowURI,
+        isAllowed:    checkURI,
+        parseURI:     parseURI,
+        allURIs:      allURIs,
+        loadNoScript: loadNoScript
     };
 
 })();
