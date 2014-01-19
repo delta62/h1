@@ -17,10 +17,7 @@
 <!ENTITY h1.prefs.ua.mangle     "Randomize User-Agent string">
 
 <!-- Whitelist labels -->
-<!ENTITY h1.prefs.whitelist.desc "This is where you put a bunch of text 
-    describing how the whitelist works.">
 <!ENTITY h1.prefs.whitelist.noscript "Use the NoScript whitelist">
-<!ENTITY h1.prefs.whitelist.noscript-missing "NoScript is not enabled">
 <!ENTITY h1.prefs.whitelist.addprompt "Address of web site:">
 <!ENTITY h1.prefs.whitelist.add "Add">
 <!ENTITY h1.prefs.whitelist.remove "Remove Selected Sites">

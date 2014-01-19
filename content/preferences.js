@@ -23,10 +23,11 @@ H1.Preferences = {
         } catch (ex) {
             let promptService = Cc['@mozilla.org/embedcomp/prompt-service;1']
                 .getService(Ci.nsIPromptService);
+            let bundle = document.getElementById('h1-string-bundle');
             promptService.alert(
                 null,
-                'Unable to add site',
-                '"' + textbox.value + '" is not a valid site name.'
+                bundle.getString('addSiteError'),
+                bundle.getFormattedString('addSiteErrorDesc', [textbox.value] )
             );
         }
     },
@@ -38,6 +39,7 @@ H1.Preferences = {
         // Load items in the listbox
         H1.Preferences.loadWhitelist();
 
+        let bundle = document.getElementById('h1-string-bundle');
         let noscriptCB = document.getElementById('h1-use-noscript');
         noscriptCB.addEventListener('CheckboxStateChange', 
             H1.Preferences.onCheckChanged);
@@ -45,12 +47,17 @@ H1.Preferences = {
         let e = new Event('CheckboxStateChange');
         noscriptCB.dispatchEvent(e);
 
+        let desc = document.getElementById('h1-whitelist-description');
+        desc.textContent = bundle.getString('whitelistDesc');
+
         // Czech if NoScript is installed
         H1.Preferences.queryNoScript(function(installed) {
             if (installed) {
                 noscriptCB.disabled = false;
+                noscriptCB.label = bundle.getString('noscriptWhitelist');
             } else {
                 noscriptCB.checked = false;
+                noscriptCB.label = bundle.getString('noscriptMissing');
             }
         });
     },
@@ -130,7 +137,10 @@ H1.Preferences = {
      * Handle changes to the noscript whitelist setting
      */
     onCheckChanged: function(event) {
-        let off = event.target.checked;
+        let cb = event.target;
+        let off = cb.checked;
+
+        // Enable/disable items
         document.getElementById('h1-whitelist-uri').disabled = off;
         document.getElementById('h1-whitelist-add').disabled = off;
         document.getElementById('h1-whitelist').disabled = off;

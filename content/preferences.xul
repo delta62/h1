@@ -9,6 +9,11 @@
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     onload="H1.Preferences.load()">
 
+    <stringbundleset>
+        <stringbundle id="h1-string-bundle"
+            src="chrome://h1/locale/h1.properties" />
+    </stringbundleset>
+
     <script type="application/javascript"
         src="chrome://h1/content/preferences.js" />
 
@@ -48,15 +53,14 @@
 
         <vbox>
 
-            <description id="h1-whitelist-description" />
+            <description id="h1-whitelist-description" style="min-width: 400px;" />
 
             <separator />
 
             <groupbox>
                 <caption label="&h1.prefs.whitelist.noscript;" />
-                <checkbox id="h1-use-noscript"
-                    label="&h1.prefs.whitelist.noscript-missing;"
-                    preference="noscript-whitelist" disabled="true" />
+                <checkbox id="h1-use-noscript" preference="noscript-whitelist"
+                    disabled="true" />
             </groupbox>
 
             <groupbox>

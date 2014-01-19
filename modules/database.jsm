@@ -300,10 +300,17 @@ var H1Database = (function() {
      * Check to see if a URI has been whitelisted. Returns true if the given
      * URI's domain is whitelisted, or false otherwise. 
      * @param uri An nsIURI object
+     * @param useNoScript Whether or not to use the NoScript whitelist in place
+     *     of h1's whitelist
      */
-    var checkURI = function(uri) {
+    var checkURI = function(uri, useNoScript) {
         let re = new RegExp(' ' + parseURI(uri) + ' ');
-        return re.test(whitelist);
+
+        if (useNoScript) {
+            re.test(noscriptUtil.service.jsPolicySites.sitesString);
+        } else {
+            return re.test(whitelist);
+        }
     };
 
     /**
