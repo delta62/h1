@@ -3,6 +3,8 @@
 ## What is h1?
 h1 attempts to reduce the amount of information you provide sites for tracking purposes. HTTP headers can transfer a substantial amount of information about users, and are often used to get information out of an end-user with or without their knowledge. h1 is an extremely lightweight plugin that allows removal or modification of several HTTP headers. As with most applications in computing, there is no "one size fits all" solution for browser configurations, and h1 is no exception. The settings are flexible enough to let you choose exactly what you're willing to share (and with whom).
 
+There's a nifty little browser fingerprinting app [here](https://panopticlick.eff.org/) - check it out!
+
 ## What does h1 do?
 Currently, there are 3 headers h1 can change:
 * **ETag:** The [`ETag`](https://en.wikipedia.org/wiki/HTTP_ETag) header was originally proposed as a caching mechanism, although it has been known to be used as a tracking tool. h1 can remove ETags altogether.
@@ -20,6 +22,7 @@ If you're already using NoScript, h1 can seamlessly use NoScript's permissions f
 
 ## Let's do this! Where's the install button?
 This project is still in development, and as such I'm not hosting it on addons.mozilla.org yet. I'll be adding a makefile soon, but if you're looking at this you're probably comfortable with
+
 1. Zipping all the files in this folder
 2. Naming the zip file h1.xpi
 3. Dragging that file onto Firefox
