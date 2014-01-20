@@ -7,8 +7,13 @@
 
         <em:id>h1@samnoedel.com</em:id>
         <em:name>h1</em:name>
-        <em:version>0.1</em:version>
+        <em:description>
+            Anti-tracking via header removal and modification
+        </em:description>
+        <em:version>0.1.0</em:version>
         <em:type>2</em:type>
+        <em:creator>Sam Singer Noedel</em:creator>
+        <em:optionsURL>chrome://h1/content/preferences.xul</em:optionsURL>
 
         <!-- Mozilla Firefox -->
         <em:targetApplication>
