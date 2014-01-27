@@ -8,5 +8,5 @@ pref('extensions.h1.etag.allow', false);
 pref('extensions.h1.ua.mangle', true);
 
 // Whitelist
-pref('extensions.h1.whitelist', ' ');
+pref('extensions.h1.whitelist', '');
 pref('extensions.h1.whitelist.noscript', false);
