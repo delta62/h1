@@ -29,4 +29,11 @@ This project is still in development, and as such I'm not hosting it on addons.m
 
 Remember - if you compile and install manually you won't get updates automatically.
 
+## Testing your browser
+Check these sites out if you want to verify that everything is working:
+* [HTTP Referer](http://www.whatismyreferer.com/)
+* [User Agent](http://whatsmyuseragent.com/)
+
+## License
+
 h1 is released under the [MIT License](http://mit-license.org/).
