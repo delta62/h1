@@ -20,12 +20,13 @@ If you only want part of h1's functionality, that's fine. Any of the above menti
 ## NoScript Integration
 If you're already using NoScript, h1 can seamlessly use NoScript's permissions for its own whitelisting. This includes both permanent and temporary permissions.
 
-## Let's do this! Where's the install button?
-This project is still in development, and as such I'm not hosting it on addons.mozilla.org yet. I'll be adding a makefile soon, but if you're looking at this you're probably comfortable with
+## Let's do this!
+This project is still in development, and as such I'm not hosting it on addons.mozilla.org yet. If you're running something that has bash, make sure you have `zip` in your `$PATH`, then do `./make.sh`. If you're on Windows, do the following:
 
-1. Zipping all the files in this folder
-2. Naming the zip file h1.xpi
-3. Dragging that file onto Firefox
+1. Zip all the files in this repo, sans git. Do not zip the repo itself.
+2. Name the zip file `h1@samnoedel.com.xpi`
+
+You can install xpi extensions by dragging them onto Firefox.
 
 Remember - if you compile and install manually you won't get updates automatically.
 
@@ -37,3 +38,7 @@ Check these sites out if you want to verify that everything is working:
 ## License
 
 h1 is released under the [MIT License](http://mit-license.org/).
+
+## Bugs
+
+Report them. If you don't want to debug and create pull requests, I will be happy to fix them.
